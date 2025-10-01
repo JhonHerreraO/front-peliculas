@@ -1,5 +1,5 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: "http://localhost:5173", // 👈 cambia al puerto de tu backend
+export const axiosConfig = axios.create({
+  baseURL: "http://localhost:3000",
 });

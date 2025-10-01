@@ -1,18 +1,42 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Medias from "./pages/Medias";
+import Generos from "./generos/Generos";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home"; 
+import GestionMenu from "./components/GestionMenu";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <nav style={{ margin: "1rem" }}>
-        <Link to="/" style={{ marginRight: "1rem" }}>Inicio</Link>
-        <Link to="/medias">Medias</Link>
-      </nav>
+    <Router>
+      {/* Barra de navegación */}
+      <Navbar />
 
-      <Routes>
-        <Route path="/" element={<h1>Bienvenido a la App de Películas 🎬</h1>} />
-        <Route path="/medias" element={<Medias />} />
-      </Routes>
-    </BrowserRouter>
+      {/* Aquí debajo puedes poner algo que siempre quieras mostrar */}
+      <div style={{ minHeight: "80vh", padding: "1rem" }}>
+        {/* Ejemplo: lista de géneros fija */}
+        
+
+        {/* Rutas */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/peliculas" element={<Medias />} />
+          {/* Menú de gestión */}
+          <Route path="/gestion" element={<GestionMenu />} />
+          <Route path="/gestion/peliculas" element={<Medias />} />
+          <Route path="/gestion/generos" element={<Generos />} />
+          <Route path="/gestion/directores" element={<Directores />} />
+          <Route path="/gestion/productoras" element={<Productoras />} />
+          <Route path="/gestion/tipos" element={<Tipos />} />
+        </Routes>
+      </div>
+
+      
+
+      {/* Footer */}
+      <Footer />
+    </Router>
   );
+
 }
