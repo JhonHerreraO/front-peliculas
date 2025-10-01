@@ -1,19 +1,60 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav style={{ background: "#333", padding: "1rem" }}>
-      <h2 style={{ color: "white", display: "inline-block", marginRight: "2rem" }}>
-        🎬 App Películas
-      </h2>
-      <Link to="/" style={{ color: "white", marginRight: "1rem" }}>Inicio</Link>
-      <Link to="/peliculas" style={{ color: "white", marginRight: "1rem" }}>Películas</Link>
-      <Link to="/gestion" style={{ color: "white", marginRight: "1rem" }}>Gestión</Link>
-      <input
-        type="text"
-        placeholder="Buscar..."
-        style={{ marginLeft: "2rem", padding: "0.3rem" }}
-      />
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+        <Link className="navbar-brand" to="/">Mi App</Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            {/* Inicio */}
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Inicio</Link>
+            </li>
+
+            {/* Películas */}
+            <li className="nav-item">
+              <Link className="nav-link" to="/peliculas">Películas</Link>
+            </li>
+
+            {/* Dropdown Gestión */}
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#"
+                id="gestionDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Gestión
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="gestionDropdown">
+                <li>
+                  <Link className="dropdown-item" to="/gestion/generos">
+                    Gestión de Géneros
+                  </Link>
+                </li>
+                {/* Agregar más servicios aquí cuando estén listos */}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 }
+

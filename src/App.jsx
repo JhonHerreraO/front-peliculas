@@ -5,7 +5,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home"; 
-
+import GestionMenu from "./components/GestionMenu";
 
 export default function App() {
   return (
@@ -22,11 +22,17 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/peliculas" element={<Medias />} />
-          <Route path="/gestion" element={<Generos />} />
+          {/* Menú de gestión */}
+          <Route path="/gestion" element={<GestionMenu />} />
+          <Route path="/gestion/peliculas" element={<Medias />} />
+          <Route path="/gestion/generos" element={<Generos />} />
+          <Route path="/gestion/directores" element={<Directores />} />
+          <Route path="/gestion/productoras" element={<Productoras />} />
+          <Route path="/gestion/tipos" element={<Tipos />} />
         </Routes>
       </div>
 
-      <Generos />
+      
 
       {/* Footer */}
       <Footer />
