@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { axiosConfig } from "../api/axios";
 
 export default function Medias() {
   const [medias, setMedias] = useState([]);
