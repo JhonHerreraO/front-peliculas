@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //import Medias from "./pages/Medias";
-import Generos from "./generos/Generos";
+import Generos from "./Views/Generos/Generos";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home"; 

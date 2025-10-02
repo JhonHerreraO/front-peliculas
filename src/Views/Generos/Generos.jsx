@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { obtenerGeneros } from "../services/GenerosServices";
+import { obtenerGeneros } from "../../services/GenerosServices";
 
 
 export default function Generos() {

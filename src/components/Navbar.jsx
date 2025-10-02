@@ -63,12 +63,12 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link className="dropdown-item" to="/gestion/media">
-                    Media (Películas)
+                    Películas
                   </Link>
                 </li>
-                 {/* Botón de búsqueda */}
-                <Buscar /> 
               </ul>
+              {/* Botón de búsqueda */}
+                <Buscar /> 
             </li>
           </ul>
         </div>
