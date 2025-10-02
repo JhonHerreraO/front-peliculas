@@ -1,5 +1,6 @@
 import React from "react";
-import Generos from "../generos/Generos"; // tu componente existente
+import Generos from "../../Views/Generos/Generos";
+
 
 export default function GenerosPage() {
   return (
