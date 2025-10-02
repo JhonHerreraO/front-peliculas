@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Medias from "./pages/Medias";
+//import Medias from "./pages/Medias";
 import Generos from "./generos/Generos";
-import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home"; 
@@ -21,14 +20,9 @@ export default function App() {
         {/* Rutas */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/peliculas" element={<Medias />} />
           {/* Menú de gestión */}
           <Route path="/gestion" element={<GestionMenu />} />
-          <Route path="/gestion/peliculas" element={<Medias />} />
           <Route path="/gestion/generos" element={<Generos />} />
-          <Route path="/gestion/directores" element={<Directores />} />
-          <Route path="/gestion/productoras" element={<Productoras />} />
-          <Route path="/gestion/tipos" element={<Tipos />} />
         </Routes>
       </div>
 

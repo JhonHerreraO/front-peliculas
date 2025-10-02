@@ -22,14 +22,6 @@ export default function Generos() {
 
    return (
   <div>
-    <ul>
-      {generos.map((genero) => (
-        <li key={genero._id}>
-          {genero.nombre} - {genero.descripcion}
-        </li>
-      ))}
-    </ul>
-
     <div className="container mt-4">
       <h2 className="mb-4 text-center">Géneros Disponibles</h2>
       <div className="row">
