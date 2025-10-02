@@ -1,54 +1,73 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Buscar from "./Buscar";
 
 export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
-        <Link className="navbar-brand" to="/">Mi App</Link>
+        {/* Logo o nombre de la app */}
+        <Link className="navbar-brand" to="/">Peliculas</Link>
+
+        {/* Botón hamburguesa para móviles */}
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarNav">
+        {/* Contenido del navbar */}
+        <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ms-auto">
             {/* Inicio */}
             <li className="nav-item">
               <Link className="nav-link" to="/">Inicio</Link>
             </li>
 
-            {/* Películas */}
-            <li className="nav-item">
-              <Link className="nav-link" to="/peliculas">Películas</Link>
-            </li>
-
             {/* Dropdown Gestión */}
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 id="gestionDropdown"
-                role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 Gestión
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="gestionDropdown">
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="gestionDropdown">
                 <li>
                   <Link className="dropdown-item" to="/gestion/generos">
-                    Gestión de Géneros
+                    Géneros
                   </Link>
                 </li>
-                {/* Agregar más servicios aquí cuando estén listos */}
+                <li>
+                  <Link className="dropdown-item" to="/gestion/directores">
+                    Directores
+                  </Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/gestion/productoras">
+                    Productoras
+                  </Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/gestion/tipos">
+                    Tipos
+                  </Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/gestion/media">
+                    Media (Películas)
+                  </Link>
+                </li>
+                 {/* Botón de búsqueda */}
+                <Buscar /> 
               </ul>
             </li>
           </ul>
@@ -57,4 +76,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
 
