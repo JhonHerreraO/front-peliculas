@@ -6,7 +6,7 @@ import { obtenerGeneros, eliminarGeneros } from "@/Services/GenerosServices";
 
 // 🎨 Importa componentes visuales
 import GenerosList from "./GenerosList";
-import GeneroForm from "./GeneroForm";
+import GeneroForm from "./GenerosForm";
 import ActualizarPorID from "@/components/ActualizarPorID";
 
 // 🧠 Componente principal
