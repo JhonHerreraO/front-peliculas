@@ -3,44 +3,45 @@ import React, { useEffect, useRef, useState } from "react";
 
 
 import {
-  obtenerGeneros,
-  eliminarGeneros,
-  obtenerGeneros_ID,
-  actualizarGeneros
-} from "@/Services/GenerosServices";
+  obtenerTipos,
+  eliminarTipos,
+  obtenerTipos_ID,
+  actualizarTipos
+} from "@/services/TiposServices";
 
 
-import GenerosList from "./GenerosList";
-import GeneroForm from "./GenerosForm";
+import TipoForm from "./TiposForm";
+import TiposList from "./TiposList";
 import ActualizarPorID from "@/components/ActualizarPorID";
 
 
-export default function Generos() {
+export default function Tipos() {
  
-  const [generos, setGeneros] = useState([]);
+  const [tipos, setTipos] = useState([]);
   const [editarID, setEditarID] = useState(null);
   const [modo, setModo] = useState(null);
 
-  
+ 
   const formularioRef = useRef(null);
 
-  const cargarGeneros = async () => {
-    const { data } = await obtenerGeneros();
-    setGeneros(data);
-  };
-
   
-  const handleEliminar = async (id) => {
-    await eliminarGeneros(id);
-    cargarGeneros();
+  const cargarTipos = async () => {
+    const { data } = await obtenerTipos();
+    setTipos(data);
   };
 
- 
+
+  const handleEliminar = async (id) => {
+    await eliminarTipos(id);
+    cargarTipos();
+  };
+
+
   useEffect(() => {
-    cargarGeneros();
+    cargarTipos();
   }, []);
 
- 
+
   useEffect(() => {
     if (editarID && formularioRef.current) {
       formularioRef.current.scrollIntoView({ behavior: "smooth" });
@@ -49,12 +50,12 @@ export default function Generos() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Géneros Disponibles</h2>
+      <h2 className="mb-4 text-center">Tipos Disponibles</h2>
 
       {/* 🧭 Menú de acciones fijo arriba */}
       <div className="d-flex justify-content-start mb-4">
         <button className="btn btn-success me-2" onClick={() => setModo("crear")}>
-          Crear Género
+          Crear Tipo
         </button>
         <button className="btn btn-warning me-2" onClick={() => setModo("actualizar")}>
           Actualizar por ID
@@ -66,40 +67,40 @@ export default function Generos() {
 
       {/* 🧾 Formulario dinámico según modo */}
       {modo === "crear" && (
-        <GeneroForm
+        <TipoForm
           modo="crear"
           setModo={setModo}
-          onGeneroCreado={cargarGeneros}
+          onTipoCreado={cargarTipos}
         />
       )}
 
       {modo === "actualizar" && (
         <ActualizarPorID
-          titulo="Género"
-          obtenerPorID={obtenerGeneros_ID}
-          actualizar={actualizarGeneros}
+          titulo="Tipo"
+          obtenerPorID={obtenerTipos_ID}
+          actualizar={actualizarTipos}
           campos={[
             { name: "nombre", label: "Nombre" },
             { name: "descripcion", label: "Descripción", type: "textarea" }
           ]}
           onActualizado={() => {
-            cargarGeneros();
+            cargarTipos();
             setModo(null);
           }}
         />
       )}
 
       {modo === "eliminar" && (
-        <GeneroForm
+        <TipoForm
           modo="eliminar"
           setModo={setModo}
-          onGeneroCreado={cargarGeneros}
+          onTipoCreado={cargarTipos}
         />
       )}
 
-      {/* 🗂️ Listado de géneros con botones individuales */}
-      <GenerosList
-        generos={generos}
+      {/* 🗂️ Listado de tipos con botones individuales */}
+      <TiposList
+        tipos={tipos}
         onEditar={(id) => setEditarID(id)}
         onEliminar={handleEliminar}
       />
@@ -107,13 +108,13 @@ export default function Generos() {
       {/* ✏️ Formulario de edición desde una card */}
       {editarID && (
         <div className="mt-4" ref={formularioRef}>
-          <h4>Editar Género</h4>
-          <GeneroForm
+          <h4>Editar Tipo</h4>
+          <TipoForm
             id={editarID}
             modo="editar"
             setModo={setModo}
-            onGeneroCreado={() => {
-              cargarGeneros();
+            onTipoCreado={() => {
+              cargarTipos();
               setEditarID(null);
             }}
           />

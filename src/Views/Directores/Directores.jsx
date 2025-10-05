@@ -1,46 +1,44 @@
-
 import React, { useEffect, useRef, useState } from "react";
 
-
+// 🔧 Servicios del backend
 import {
-  obtenerGeneros,
-  eliminarGeneros,
-  obtenerGeneros_ID,
-  actualizarGeneros
-} from "@/Services/GenerosServices";
+  obtenerDirectores,
+  eliminarDirector,
+  obtenerDirector_ID,
+  actualizarDirector
+} from "@/services/DirectoresServices";
 
-
-import GenerosList from "./GenerosList";
-import GeneroForm from "./GenerosForm";
+// 🎨 Componentes visuales
+import DirectorForm from "./DirectoresForm";
+import DirectoresList from "./DirectoresList";
 import ActualizarPorID from "@/components/ActualizarPorID";
 
-
-export default function Generos() {
- 
-  const [generos, setGeneros] = useState([]);
+// 🧠 Componente principal
+export default function Directores() {
+  const [directores, setDirectores] = useState([]);
   const [editarID, setEditarID] = useState(null);
   const [modo, setModo] = useState(null);
-
-  
   const formularioRef = useRef(null);
 
-  const cargarGeneros = async () => {
-    const { data } = await obtenerGeneros();
-    setGeneros(data);
+  // 🔄 Cargar todos los directores
+  const cargarDirectores = async () => {
+    const { data } = await obtenerDirectores();
+    setDirectores(data);
   };
 
-  
+  // 🗑️ Eliminar director por ID
   const handleEliminar = async (id) => {
-    await eliminarGeneros(id);
-    cargarGeneros();
+    if (!id) return alert("ID inválido.");
+    await eliminarDirector(id);
+    cargarDirectores();
   };
 
- 
+  // 🚀 Cargar al montar
   useEffect(() => {
-    cargarGeneros();
+    cargarDirectores();
   }, []);
 
- 
+  // 🧭 Scroll automático al editar
   useEffect(() => {
     if (editarID && formularioRef.current) {
       formularioRef.current.scrollIntoView({ behavior: "smooth" });
@@ -49,12 +47,12 @@ export default function Generos() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Géneros Disponibles</h2>
+      <h2 className="mb-4 text-center">Directores Registrados</h2>
 
-      {/* 🧭 Menú de acciones fijo arriba */}
+      {/* 🧭 Menú de acciones */}
       <div className="d-flex justify-content-start mb-4">
         <button className="btn btn-success me-2" onClick={() => setModo("crear")}>
-          Crear Género
+          Crear Director
         </button>
         <button className="btn btn-warning me-2" onClick={() => setModo("actualizar")}>
           Actualizar por ID
@@ -64,56 +62,48 @@ export default function Generos() {
         </button>
       </div>
 
-      {/* 🧾 Formulario dinámico según modo */}
+      {/* 🧾 Formulario dinámico */}
       {modo === "crear" && (
-        <GeneroForm
-          modo="crear"
-          setModo={setModo}
-          onGeneroCreado={cargarGeneros}
-        />
+        <DirectorForm modo="crear" setModo={setModo} onDirectorCreado={cargarDirectores} />
       )}
 
       {modo === "actualizar" && (
         <ActualizarPorID
-          titulo="Género"
-          obtenerPorID={obtenerGeneros_ID}
-          actualizar={actualizarGeneros}
+          titulo="Director"
+          obtenerPorID={obtenerDirector_ID}
+          actualizar={actualizarDirector}
           campos={[
             { name: "nombre", label: "Nombre" },
-            { name: "descripcion", label: "Descripción", type: "textarea" }
+            { name: "biografia", label: "Biografía", type: "textarea" }
           ]}
           onActualizado={() => {
-            cargarGeneros();
+            cargarDirectores();
             setModo(null);
           }}
         />
       )}
 
       {modo === "eliminar" && (
-        <GeneroForm
-          modo="eliminar"
-          setModo={setModo}
-          onGeneroCreado={cargarGeneros}
-        />
+        <DirectorForm modo="eliminar" setModo={setModo} onDirectorCreado={cargarDirectores} />
       )}
 
-      {/* 🗂️ Listado de géneros con botones individuales */}
-      <GenerosList
-        generos={generos}
+      {/* 🗂️ Listado de directores */}
+      <DirectoresList
+        directores={directores}
         onEditar={(id) => setEditarID(id)}
         onEliminar={handleEliminar}
       />
 
-      {/* ✏️ Formulario de edición desde una card */}
+      {/* ✏️ Formulario de edición desde card */}
       {editarID && (
         <div className="mt-4" ref={formularioRef}>
-          <h4>Editar Género</h4>
-          <GeneroForm
+          <h4>Editar Director</h4>
+          <DirectorForm
             id={editarID}
             modo="editar"
             setModo={setModo}
-            onGeneroCreado={() => {
-              cargarGeneros();
+            onDirectorCreado={() => {
+              cargarDirectores();
               setEditarID(null);
             }}
           />
@@ -122,3 +112,4 @@ export default function Generos() {
     </div>
   );
 }
+

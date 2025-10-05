@@ -1,46 +1,37 @@
-
 import React, { useEffect, useRef, useState } from "react";
-
-
 import {
-  obtenerGeneros,
-  eliminarGeneros,
-  obtenerGeneros_ID,
-  actualizarGeneros
-} from "@/Services/GenerosServices";
+  obtenerMedias,
+  eliminarMedia,
+  obtenerMedia_ID,
+  actualizarMedia
+}from "@/services/MediaServices";
 
 
-import GenerosList from "./GenerosList";
-import GeneroForm from "./GenerosForm";
+import MediaForm from "./MediaForm";
+import MediaList from "./MediaList";
 import ActualizarPorID from "@/components/ActualizarPorID";
 
-
-export default function Generos() {
- 
-  const [generos, setGeneros] = useState([]);
+export default function Media() {
+  const [medias, setMedias] = useState([]);
   const [editarID, setEditarID] = useState(null);
   const [modo, setModo] = useState(null);
-
-  
   const formularioRef = useRef(null);
 
-  const cargarGeneros = async () => {
-    const { data } = await obtenerGeneros();
-    setGeneros(data);
+  const cargarMedias = async () => {
+    const { data } = await obtenerMedias();
+    setMedias(data);
   };
 
-  
   const handleEliminar = async (id) => {
-    await eliminarGeneros(id);
-    cargarGeneros();
+    if (!id) return alert("ID inválido.");
+    await eliminarMedia(id);
+    cargarMedias();
   };
 
- 
   useEffect(() => {
-    cargarGeneros();
+    cargarMedias();
   }, []);
 
- 
   useEffect(() => {
     if (editarID && formularioRef.current) {
       formularioRef.current.scrollIntoView({ behavior: "smooth" });
@@ -49,12 +40,11 @@ export default function Generos() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Géneros Disponibles</h2>
+      <h2 className="mb-4 text-center">Películas y Series</h2>
 
-      {/* 🧭 Menú de acciones fijo arriba */}
       <div className="d-flex justify-content-start mb-4">
         <button className="btn btn-success me-2" onClick={() => setModo("crear")}>
-          Crear Género
+          Crear Producción
         </button>
         <button className="btn btn-warning me-2" onClick={() => setModo("actualizar")}>
           Actualizar por ID
@@ -64,56 +54,48 @@ export default function Generos() {
         </button>
       </div>
 
-      {/* 🧾 Formulario dinámico según modo */}
       {modo === "crear" && (
-        <GeneroForm
-          modo="crear"
-          setModo={setModo}
-          onGeneroCreado={cargarGeneros}
-        />
+        <MediaForm modo="crear" setModo={setModo} onMediaCreada={cargarMedias} />
       )}
 
       {modo === "actualizar" && (
         <ActualizarPorID
-          titulo="Género"
-          obtenerPorID={obtenerGeneros_ID}
-          actualizar={actualizarGeneros}
+          titulo="Media"
+          obtenerPorID={obtenerMedia_ID}
+          actualizar={actualizarMedia}
           campos={[
-            { name: "nombre", label: "Nombre" },
-            { name: "descripcion", label: "Descripción", type: "textarea" }
+            { name: "titulo", label: "Título" },
+            { name: "sinopsis", label: "Sinopsis", type: "textarea" },
+            { name: "url", label: "URL" },
+            { name: "imagen", label: "Imagen" },
+            { name: "fecha_estreno", label: "Fecha de estreno", type: "date" }
           ]}
           onActualizado={() => {
-            cargarGeneros();
+            cargarMedias();
             setModo(null);
           }}
         />
       )}
 
       {modo === "eliminar" && (
-        <GeneroForm
-          modo="eliminar"
-          setModo={setModo}
-          onGeneroCreado={cargarGeneros}
-        />
+        <MediaForm modo="eliminar" setModo={setModo} onMediaCreada={cargarMedias} />
       )}
 
-      {/* 🗂️ Listado de géneros con botones individuales */}
-      <GenerosList
-        generos={generos}
+      <MediaList
+        medias={medias}
         onEditar={(id) => setEditarID(id)}
         onEliminar={handleEliminar}
       />
 
-      {/* ✏️ Formulario de edición desde una card */}
       {editarID && (
         <div className="mt-4" ref={formularioRef}>
-          <h4>Editar Género</h4>
-          <GeneroForm
+          <h4>Editar Producción</h4>
+          <MediaForm
             id={editarID}
             modo="editar"
             setModo={setModo}
-            onGeneroCreado={() => {
-              cargarGeneros();
+            onMediaCreada={() => {
+              cargarMedias();
               setEditarID(null);
             }}
           />

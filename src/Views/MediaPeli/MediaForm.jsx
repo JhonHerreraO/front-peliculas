@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   crearMedia,
   obtenerMedia_ID,
-  actualizarMedia,
+  actualizarMedia
 } from "@/services/MediaServices";
 
 import { obtenerGeneros } from "@/services/GenerosServices";
@@ -10,14 +10,7 @@ import { obtenerDirectores } from "@/services/DirectoresServices";
 import { obtenerProductoras } from "@/services/ProductorasServices";
 import { obtenerTipos } from "@/services/TiposServices";
 
-export default function MediaForm({
-  modo,
-  setModo,
-  id,
-  onMediaCreada,
-  datosIniciales,
-  onEliminar,
-}) {
+export default function MediaForm({ modo, setModo, id, onMediaCreada }) {
   const [datos, setDatos] = useState({
     serial: "",
     titulo: "",
@@ -28,7 +21,7 @@ export default function MediaForm({
     generos_id: [],
     directores_id: [],
     productoras_id: [],
-    tipos_id: "",
+    tipos_id: ""
   });
 
   const [idLocal, setIdLocal] = useState(id || "");
@@ -37,46 +30,39 @@ export default function MediaForm({
   const [productoras, setProductoras] = useState([]);
   const [tipos, setTipos] = useState([]);
 
-  // Cargar listas iniciales
   useEffect(() => {
-    obtenerGeneros().then(({ data }) =>
-      setGeneros(data.filter((g) => g.estado === true))
-    );
-    obtenerDirectores().then(({ data }) =>
-      setDirectores(data.filter((d) => d.estado === true))
-    );
-    obtenerProductoras().then(({ data }) =>
-      setProductoras(data.filter((p) => p.estado === true))
-    );
-    obtenerTipos().then(({ data }) => setTipos(data));
+    obtenerGeneros().then(({ data }) => {
+      console.log("🎭 Géneros:", data);
+      setGeneros(data.filter(g => g.estado === true));
+    });
+
+    obtenerDirectores().then(({ data }) => {
+      console.log("🎥 Directores:", data);
+      setDirectores(data.filter(d => d.estado === true));
+    });
+
+    obtenerProductoras().then(({ data }) => {
+      console.log("🏢 Productoras:", data);
+      setProductoras(data.filter(p => p.estado === true));
+    });
+
+    obtenerTipos().then(({ data }) => {
+      console.log("📦 Tipos:", data);
+      setTipos(data);
+    });
   }, []);
 
-  // Cargar datos para editar
   useEffect(() => {
     if ((modo === "editar" || modo === "actualizar") && idLocal) {
       obtenerMedia_ID(idLocal)
         .then(({ data }) => {
+          console.log("✏️ Cargando media para edición:", data);
           const fechaFormateada = data.fecha_estreno?.slice(0, 10);
           setDatos({ ...data, fecha_estreno: fechaFormateada });
         })
         .catch(() => alert("No se encontró la producción con ese ID."));
     }
   }, [modo, idLocal]);
-
-  // Si vienen datos desde una API externa (ej: TMDB)
-  useEffect(() => {
-    if (datosIniciales) {
-      setDatos((prev) => ({
-        ...prev,
-        serial: `tmdb-${datosIniciales.id}`,
-        titulo: datosIniciales.title,
-        sinopsis: datosIniciales.overview,
-        imagen: `https://image.tmdb.org/t/p/w500${datosIniciales.poster_path}`,
-        fecha_estreno: datosIniciales.release_date?.slice(0, 10) || "",
-      }));
-      if (setModo) setModo("crear");
-    }
-  }, [datosIniciales]);
 
   const limpiar = () => {
     setDatos({
@@ -89,7 +75,7 @@ export default function MediaForm({
       generos_id: [],
       directores_id: [],
       productoras_id: [],
-      tipos_id: "",
+      tipos_id: ""
     });
     setIdLocal("");
     if (setModo) setModo(null);
@@ -121,14 +107,16 @@ export default function MediaForm({
       tipos_id: datos.tipos_id,
       generos_id: datos.generos_id,
       directores_id: datos.directores_id,
-      productoras_id: datos.productoras_id,
+      productoras_id: datos.productoras_id
     };
 
     try {
       if (modo === "editar" || modo === "actualizar") {
+        console.log("✏️ Actualizando:", payload);
         await actualizarMedia(idLocal, payload);
         alert("✅ Producción actualizada.");
       } else {
+        console.log("📤 Creando:", payload);
         await crearMedia(payload);
         alert("✅ Producción creada.");
       }
@@ -144,15 +132,10 @@ export default function MediaForm({
   return (
     <div className="card p-3 mb-4 shadow-sm">
       <h5 className="mb-3">
-        {modo === "editar" || modo === "actualizar"
-          ? "Editar Producción"
-          : "Crear Producción"}
+        {modo === "editar" || modo === "actualizar" ? "Editar Producción" : "Crear Producción"}
       </h5>
 
-      {/* SERIAL */}
-      <label className="form-label">
-        Serial único <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Serial único <span className="text-danger">*</span></label>
       <input
         type="text"
         className="form-control mb-2"
@@ -160,10 +143,7 @@ export default function MediaForm({
         onChange={(e) => setDatos({ ...datos, serial: e.target.value })}
       />
 
-      {/* TÍTULO */}
-      <label className="form-label">
-        Título <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Título <span className="text-danger">*</span></label>
       <input
         type="text"
         className="form-control mb-2"
@@ -171,7 +151,6 @@ export default function MediaForm({
         onChange={(e) => setDatos({ ...datos, titulo: e.target.value })}
       />
 
-      {/* SINOPSIS */}
       <label className="form-label">Sinopsis</label>
       <textarea
         className="form-control mb-2"
@@ -179,10 +158,7 @@ export default function MediaForm({
         onChange={(e) => setDatos({ ...datos, sinopsis: e.target.value })}
       />
 
-      {/* URL */}
-      <label className="form-label">
-        URL del video <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">URL del video <span className="text-danger">*</span></label>
       <input
         type="text"
         className="form-control mb-2"
@@ -190,7 +166,6 @@ export default function MediaForm({
         onChange={(e) => setDatos({ ...datos, url: e.target.value })}
       />
 
-      {/* IMAGEN */}
       <label className="form-label">Imagen de portada (URL)</label>
       <input
         type="text"
@@ -199,109 +174,69 @@ export default function MediaForm({
         onChange={(e) => setDatos({ ...datos, imagen: e.target.value })}
       />
 
-      {/* FECHA */}
       <label className="form-label">Fecha de estreno</label>
       <input
         type="date"
         className="form-control mb-3"
         value={datos.fecha_estreno || ""}
-        onChange={(e) =>
-          setDatos({ ...datos, fecha_estreno: e.target.value })
-        }
+        onChange={(e) => setDatos({ ...datos, fecha_estreno: e.target.value })}
       />
 
-      {/* TIPO */}
-      <label className="form-label">
-        Tipo <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Tipo <span className="text-danger">*</span></label>
       <select
         className="form-control mb-2"
         value={datos.tipos_id}
         onChange={(e) => setDatos({ ...datos, tipos_id: e.target.value })}
       >
         <option value="">Selecciona tipo</option>
-        {tipos.map((tipo) => (
-          <option key={tipo._id} value={tipo._id}>
-            {tipo.nombre}
-          </option>
+        {tipos.map(tipo => (
+          <option key={tipo._id} value={tipo._id}>{tipo.nombre}</option>
         ))}
       </select>
 
-      {/* GÉNERO */}
-      <label className="form-label">
-        Género <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Género <span className="text-danger">*</span></label>
       <select
         className="form-control mb-2"
         value={datos.generos_id[0] || ""}
-        onChange={(e) =>
-          setDatos({ ...datos, generos_id: [e.target.value] })
-        }
+        onChange={(e) => setDatos({ ...datos, generos_id: [e.target.value] })}
       >
         <option value="">Selecciona género</option>
-        {generos.map((g) => (
-          <option key={g._id} value={g._id}>
-            {g.nombre}
-          </option>
+        {generos.map(g => (
+          <option key={g._id} value={g._id}>{g.nombre}</option>
         ))}
       </select>
 
-      {/* DIRECTOR */}
-      <label className="form-label">
-        Director <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Director <span className="text-danger">*</span></label>
       <select
         className="form-control mb-2"
         value={datos.directores_id[0] || ""}
-        onChange={(e) =>
-          setDatos({ ...datos, directores_id: [e.target.value] })
-        }
+        onChange={(e) => setDatos({ ...datos, directores_id: [e.target.value] })}
       >
         <option value="">Selecciona director</option>
-        {directores.map((d) => (
-          <option key={d._id} value={d._id}>
-            {d.nombre}
-          </option>
+        {directores.map(d => (
+          <option key={d._id} value={d._id}>{d.nombre}</option>
         ))}
       </select>
 
-      {/* PRODUCTORA */}
-      <label className="form-label">
-        Productora <span className="text-danger">*</span>
-      </label>
+      <label className="form-label">Productora <span className="text-danger">*</span></label>
       <select
         className="form-control mb-3"
         value={datos.productoras_id[0] || ""}
-        onChange={(e) =>
-          setDatos({ ...datos, productoras_id: [e.target.value] })
-        }
+        onChange={(e) => setDatos({ ...datos, productoras_id: [e.target.value] })}
       >
         <option value="">Selecciona productora</option>
-        {productoras.map((p) => (
-          <option key={p._id} value={p._id}>
-            {p.nombre}
-          </option>
+        {productoras.map(p => (
+          <option key={p._id} value={p._id}>{p.nombre}</option>
         ))}
       </select>
 
-      {/* BOTONES */}
-      <div className="d-flex flex-wrap gap-2">
-        <button className="btn btn-primary" onClick={handleGuardar}>
-          {modo === "editar" || modo === "actualizar"
-            ? "Actualizar Producción"
-            : "Crear Producción"}
-        </button>
+      <button className="btn btn-primary" onClick={handleGuardar}>
+        {modo === "editar" || modo === "actualizar" ? "Actualizar Producción" : "Crear Producción"}
+      </button>
 
-        {onEliminar && modo === "editar" && (
-          <button className="btn btn-danger" onClick={onEliminar}>
-            Eliminar
-          </button>
-        )}
-
-        <button className="btn btn-secondary" onClick={limpiar}>
-          Limpiar
-        </button>
-      </div>
+      <small className="text-muted mt-2 d-block">
+        Los campos marcados con <span className="text-danger">*</span> son obligatorios.
+      </small>
     </div>
   );
 }

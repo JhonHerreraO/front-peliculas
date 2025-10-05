@@ -1,49 +1,72 @@
 import React, { useState, useEffect } from "react";
-import { obtenerGeneros_ID, actualizarGeneros } from "../services/GenerosServices";
 
-export default function ActualizarPorID({ onActualizado }) {
+export default function ActualizarPorID({ 
+  titulo = "Actualizar por ID", 
+  obtenerPorID, 
+  actualizar, 
+  campos = [], 
+  onActualizado 
+}) {
   const [id, setId] = useState("");
-  const [datos, setDatos] = useState({ nombre: "", descripcion: "" });
+  const [datos, setDatos] = useState({});
 
   useEffect(() => {
     if (id) {
-      obtenerGeneros_ID(id).then(({ data }) => {
-        setDatos({ nombre: data.nombre, descripcion: data.descripcion });
+      obtenerPorID(id).then(({ data }) => {
+        const nuevosDatos = {};
+        campos.forEach(campo => {
+          nuevosDatos[campo.name] = data[campo.name] || "";
+        });
+        setDatos(nuevosDatos);
       });
     }
   }, [id]);
 
   const handleActualizar = async () => {
-    await actualizarGeneros(id, datos);
+    await actualizar(id, datos);
     setId("");
-    setDatos({ nombre: "", descripcion: "" });
+    setDatos({});
     if (onActualizado) onActualizado();
   };
 
   return (
     <div className="card p-3 mb-4 shadow-sm">
-      <h5>Actualizar Género por ID</h5>
+      <h5>{titulo} por ID</h5>
       <input
         type="text"
         className="form-control mb-2"
-        placeholder="ID del género"
+        placeholder={`ID del ${titulo.toLowerCase()}`}
         value={id}
         onChange={(e) => setId(e.target.value)}
       />
-      <input
-        type="text"
-        className="form-control mb-2"
-        placeholder="Nombre"
-        value={datos.nombre}
-        onChange={(e) => setDatos({ ...datos, nombre: e.target.value })}
-      />
-      <textarea
-        className="form-control mb-3"
-        placeholder="Descripción"
-        value={datos.descripcion}
-        onChange={(e) => setDatos({ ...datos, descripcion: e.target.value })}
-      />
-      <button className="btn btn-warning" onClick={handleActualizar}>Actualizar</button>
+      {campos.map((campo) =>
+        campo.type === "textarea" ? (
+          <textarea
+            key={campo.name}
+            className="form-control mb-2"
+            placeholder={campo.label}
+            value={datos[campo.name] || ""}
+            onChange={(e) =>
+              setDatos({ ...datos, [campo.name]: e.target.value })
+            }
+          />
+        ) : (
+          <input
+            key={campo.name}
+            type={campo.type || "text"}
+            className="form-control mb-2"
+            placeholder={campo.label}
+            value={datos[campo.name] || ""}
+            onChange={(e) =>
+              setDatos({ ...datos, [campo.name]: e.target.value })
+            }
+          />
+        )
+      )}
+      <button className="btn btn-warning" onClick={handleActualizar}>
+        Actualizar
+      </button>
     </div>
   );
 }
+
