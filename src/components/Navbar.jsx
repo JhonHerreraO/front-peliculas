@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { BusquedaContext } from "@/components/BusquedaContex";
 
 export default function Navbar() {
+  const { termino, setTermino } = useContext(BusquedaContext);
+
   return (
     <nav className="navbar navbar-expand-lg bg-dark navbar-dark shadow-sm">
       <div className="container">
-        {/* Título estilizado con más porte */}
         <Link className="navbar-brand fw-bolder fs-2" to="/" style={{ letterSpacing: "1px" }}>
           <span className="text-danger">Netflix</span>{" "}
           <span className="text-white">Gratis</span>
@@ -23,7 +26,6 @@ export default function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse justify-content-between" id="navbarScroll">
-          {/* Menú de navegación con separación */}
           <ul className="navbar-nav mb-2 mb-lg-0 gap-4">
             <li className="nav-item">
               <Link className="nav-link active" to="/">Inicio</Link>
@@ -49,15 +51,15 @@ export default function Navbar() {
             </li>
           </ul>
 
-          {/* Buscador alineado a la derecha */}
-          <form className="d-flex ms-auto" role="search">
+          {/* Buscador simple que actualiza el contexto */}
+          <form className="d-flex ms-auto">
             <input
               className="form-control me-2"
               type="search"
               placeholder="Buscar película..."
-              aria-label="Search"
+              value={termino}
+              onChange={(e) => setTermino(e.target.value)}
             />
-            <button className="btn btn-outline-light" type="submit">Buscar</button>
           </form>
         </div>
       </div>
