@@ -3,18 +3,17 @@ import {
   obtenerMedias,
   eliminarMedia,
   obtenerMedia_ID,
-  actualizarMedia
-}from "@/services/MediaServices";
-
-
-import MediaForm from "./MediaForm";
+  actualizarMedia,
+} from "@/Services/MediaServices"; // ajusta según tu API
 import MediaList from "./MediaList";
+import MediaForm from "./MediaForm";
 import ActualizarPorID from "@/components/ActualizarPorID";
 
 export default function Media() {
   const [medias, setMedias] = useState([]);
   const [editarID, setEditarID] = useState(null);
   const [modo, setModo] = useState(null);
+
   const formularioRef = useRef(null);
 
   const cargarMedias = async () => {
@@ -23,7 +22,6 @@ export default function Media() {
   };
 
   const handleEliminar = async (id) => {
-    if (!id) return alert("ID inválido.");
     await eliminarMedia(id);
     cargarMedias();
   };
@@ -40,11 +38,12 @@ export default function Media() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Películas y Series</h2>
+      <h2 className="mb-4 text-center">Medias Disponibles</h2>
 
+      {/* Menú de acciones */}
       <div className="d-flex justify-content-start mb-4">
         <button className="btn btn-success me-2" onClick={() => setModo("crear")}>
-          Crear Producción
+          Crear Media
         </button>
         <button className="btn btn-warning me-2" onClick={() => setModo("actualizar")}>
           Actualizar por ID
@@ -54,6 +53,7 @@ export default function Media() {
         </button>
       </div>
 
+      {/* Formularios según modo */}
       {modo === "crear" && (
         <MediaForm modo="crear" setModo={setModo} onMediaCreada={cargarMedias} />
       )}
@@ -65,10 +65,8 @@ export default function Media() {
           actualizar={actualizarMedia}
           campos={[
             { name: "titulo", label: "Título" },
-            { name: "sinopsis", label: "Sinopsis", type: "textarea" },
-            { name: "url", label: "URL" },
-            { name: "imagen", label: "Imagen" },
-            { name: "fecha_estreno", label: "Fecha de estreno", type: "date" }
+            { name: "descripcion", label: "Descripción", type: "textarea" },
+            { name: "genero", label: "Género" },
           ]}
           onActualizado={() => {
             cargarMedias();
@@ -81,15 +79,13 @@ export default function Media() {
         <MediaForm modo="eliminar" setModo={setModo} onMediaCreada={cargarMedias} />
       )}
 
-      <MediaList
-        medias={medias}
-        onEditar={(id) => setEditarID(id)}
-        onEliminar={handleEliminar}
-      />
+      {/* Listado de medias */}
+      <MediaList medias={medias} onEditar={(id) => setEditarID(id)} onEliminar={handleEliminar} />
 
+      {/* Formulario de edición desde card */}
       {editarID && (
         <div className="mt-4" ref={formularioRef}>
-          <h4>Editar Producción</h4>
+          <h4>Editar Media</h4>
           <MediaForm
             id={editarID}
             modo="editar"
