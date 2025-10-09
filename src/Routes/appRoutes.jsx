@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import GestionMenu from "../components/GestionMenu";
 import GenerosPage from "../pages/Gestion/GeneroPage";
-import MediaPage from "../pages/gestion/MediaPage";
+import MediaPage from "../pages/Gestion/MediaPage";
 import TiposPage from "../pages/Gestion/TiposPage";
 import DirectoresPage from "../pages/Gestion/DirectoresPage";
 import ProductorasPage from "../pages/Gestion/ProductorasPage";
