@@ -1,9 +1,8 @@
-import axios from "axios";
+import { axiosConfig } from "../api/axios";
 
-const API_URL = "http://localhost:3000/productoras";
-
-export const obtenerProductoras = () => axios.get(API_URL);
-export const obtenerProductora_ID = (id) => axios.get(`${API_URL}/${id}`);
-export const crearProductora = (data) => axios.post(API_URL, data);
-export const actualizarProductora = (id, data) => axios.put(`${API_URL}/${id}`, data);
-export const eliminarProductora = (id) => axios.delete(`${API_URL}/${id}`);
+// CRUD de Productora
+export const obtenerProductoras = () => axiosConfig.get("/productoras");
+export const obtenerProductora_ID = (id) => axiosConfig.get(`/productoras/${id}`);
+export const crearProductora = (data) => axiosConfig.post("/productoras", data);
+export const actualizarProductora = (id, data) => axiosConfig.put(`/productoras/${id}`, data);
+export const eliminarProductora = (id) => axiosConfig.delete(`/productoras/${id}`);
